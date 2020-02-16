@@ -4,11 +4,11 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-intext',
-  templateUrl: './intext.component.html',
-  styleUrls: ['./intext.component.css']
+  selector: 'app-lzw',
+  templateUrl: './lzw.component.html',
+  styleUrls: ['./lzw.component.css']
 })
-export class IntextComponent implements OnInit {
+export class LzwComponent implements OnInit {
 
   public textField = "AAABBAAAAABCCBAAABCDDDBABCDEEDCBBDEBBEDBABDCCDBAAABD CBAAAAABBAAA";
   public mainText = "";

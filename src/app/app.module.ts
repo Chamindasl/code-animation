@@ -4,12 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { IntextComponent } from './intext/intext.component';
+import { LzwComponent } from './lzw/lzw.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    IntextComponent
+    LzwComponent
   ],
   imports: [
     BrowserModule,
