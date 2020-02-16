@@ -1,1 +1,62 @@
-<p>intext works!</p>
+
+<div class="row">
+  <div class="three-column">
+    <div>
+      <input [(ngModel)]="textField" type="text" (keyup)="addSpace()">
+    </div>
+    <div>
+      <label>L {{mainText|slice : 0 : pStartPos +1}}</label>
+      <label class="solid-red">{{p}}</label>
+      <label class="solid-blue">{{c}}</label>
+      <label>R {{mainText|slice : pos + 1}}</label>
+    </div>
+    <div>
+      <button (click)="onClickMe()">Click me!</button>
+    </div>
+  </div>
+  <div class="three-column">
+    <div>P = {{p}}</div>
+    <div>C = {{c}}</div>
+    <div>P + C = {{p + c}}</div>
+    <div>codestream = {{codestream}}</div>
+    <div>pos = {{pos}}</div>
+    <div>P pos Start = {{pStartPos}}</div>
+  </div>
+  <div class="three-column">
+    <div *ngFor="let item of rdict | keyvalue" class="row">
+      <div class="two-column">
+        {{item.value}}
+      </div>
+      <div class="two-column">
+        {{item.key}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+
+  <ul class="oul">
+    <li [ngClass]="{'selected': step==10}">At the start the dictionary contains all possible roots and P is empty.</li>
+    <li [ngClass]="{'selected': step==20}">Let C be the next character in the stream</li>
+    <li [ngClass]="{'selected': step==30}">Is the new string P+C present in the dictionary?
+      <ul>
+        <li [ngClass]="{'selected': step==40}"> If yes, P = P+C (extend the string P with C)</li>
+        <li [ngClass]="{'selected': step==50}"> If no, then
+          <ul>
+            <li [ngClass]="{'selected': step==60}">Output the code word which represents P to the codestream</li>
+            <li [ngClass]="{'selected': step==70}"> Add the string P+C to the dictionary</li>
+            <li [ngClass]="{'selected': step==80}"> Set P=C (P contains only C now)</li>
+          </ul>
+        </li>
+        <li [ngClass]="{'selected': step==90}"> Check if there are more characters in the stream
+          <ul>
+            <li [ngClass]="{'selected': step==100}">If yes, go back to the second step</li>
+            <li [ngClass]="{'selected': step==110}">If no, then output the code representing P to the codestream and end</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+</div>
