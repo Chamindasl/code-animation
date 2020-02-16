@@ -50,14 +50,7 @@ export class IntextComponent implements OnInit {
     this.mainText.split('').forEach(e => {
       let arr = this.isInDict(e)
       if (!(arr && arr.length)) {
-        this.dict.push({
-          "step": "-",
-          "p": "-",
-          "c": "-",
-          "dictCode": e,
-          "dictVal": this.nextCode++,
-          "foundInDic": "-"
-        });
+        this.dict.push({"step": "-", "p": "-", "c": "-", "dictCode": e, "dictVal": this.nextCode++, "foundInDic": "-" });
       }
     })
   }
@@ -73,38 +66,17 @@ export class IntextComponent implements OnInit {
       if (this.pos == this.mainText.length) {
         let lastIdx = this.isInDict(this.p)[0]
         this.codestream = this.codestream + "(" + lastIdx.dictVal + ")";
-        this.dict.push({
-          "step": this.pos + 1,
-          "p": this.p,
-          "c": "",
-          "dictCode": lastIdx.dictCode,
-          "dictVal": lastIdx.dictVal,
-          "foundInDic": ""
-        })
+        this.dict.push({"step": this.pos + 1, "p": this.p, "c": "", "dictCode": lastIdx.dictCode, "dictVal": lastIdx.dictVal, "foundInDic": ""})
       }
       this.pos++;
     } else {
       let arr = this.isInDict(this.p + this.c)
       if (arr && arr.length) {
-        this.dict.push({
-          "step": this.pos + 1,
-          "p": this.p,
-          "c": this.c,
-          "dictCode": "",
-          "dictVal": "",
-          "foundInDic": arr[0].dictVal
-        });
+        this.dict.push({ "step": this.pos + 1, "p": this.p, "c": this.c, "dictCode": "", "dictVal": "", "foundInDic": arr[0].dictVal });
         this.p = this.p + this.c;
       } else {
         this.codestream = this.codestream + "(" + this.isInDict(this.p)[0].dictVal + ")";
-        this.dict.push({
-          "step": this.pos + 1,
-          "p": this.p,
-          "c": this.c,
-          "dictCode": this.p + this.c,
-          "dictVal": this.nextCode++,
-          "foundInDic": ""
-        });
+        this.dict.push({ "step": this.pos + 1, "p": this.p, "c": this.c, "dictCode": this.p + this.c, "dictVal": this.nextCode++, "foundInDic": "" });
         this.p = this.c
         this.pStartPos = this.pos;
       }
