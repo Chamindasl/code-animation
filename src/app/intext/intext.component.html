@@ -2,7 +2,7 @@
 <div class="row">
   <div class="three-column">
     <div>
-      <input [(ngModel)]="textField" type="text" (keyup)="addSpace()">
+      <input [(ngModel)]="textField" type="text" >
     </div>
     <div>
       <label>{{mainText|slice : 0 : pStartPos +1}}</label>
@@ -11,7 +11,8 @@
       <label>{{mainText|slice : pos + 1}}</label>
     </div>
     <div>
-      <button (click)="onClickMe()">Click me!</button>
+      <button (click)="init()">Init</button>
+      <button (click)="onClickMe()">Next</button>
     </div>
   </div>
   <div class="three-column">
@@ -23,14 +24,29 @@
     <div>P pos Start = {{pStartPos}}</div>
   </div>
   <div class="three-column">
-    <div *ngFor="let item of rdict | keyvalue" class="row">
-      <div class="two-column">
-        {{item.value}}
-      </div>
-      <div class="two-column">
-        {{item.key}}
-      </div>
-    </div>
+    <table border="1">
+      <tr><th>step</th><th>p</th><th>c</th><th>p + c</th><th>found in</th><th>out</th></tr>
+    <tr *ngFor = "let row of dict">
+      <td>
+        {{row.step}}
+      </td>
+      <td>
+        {{row.p}}
+      </td>
+      <td>
+        {{row.c}}
+      </td>
+      <td>
+        {{row.p + row.c}}
+      </td>
+      <td>
+        {{row.foundInDic}}
+      </td>
+      <td>
+        ({{row.dictVal}}){{row.dictCode}}
+      </td>
+    </tr>
+    </table>
   </div>
 </div>
 
