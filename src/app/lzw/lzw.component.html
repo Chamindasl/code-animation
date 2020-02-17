@@ -11,9 +11,12 @@
       <label>{{mainText|slice : pos + 1}}</label>
     </div>
     <div>
-      <mat-checkbox [(ngModel)]="useMarkTable">Use MarkDaly Table</mat-checkbox>
       <button (click)="init()">Init</button>
-      <button (click)="onClickMe()">Next</button>
+      <button (click)="onClickMe()">Step by Step</button>
+    </div>
+    <div>
+      <mat-checkbox [(ngModel)]="useMarkTable">Use MarkDaly Table</mat-checkbox>
+      <mat-checkbox [(ngModel)]="autoRun" (click)="auto()">Auto Run</mat-checkbox>
     </div>
   </div>
   <div class="three-column">

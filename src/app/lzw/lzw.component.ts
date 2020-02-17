@@ -24,6 +24,7 @@ export class LzwComponent implements OnInit {
   public nextCode = 0;
   public useMarkTable = false;
   public flowStep = 0;
+  public autoRun = false;
 
   constructor() {}
 
@@ -58,6 +59,14 @@ export class LzwComponent implements OnInit {
     })
   }
 
+  auto() {
+    if (!this.autoRun) {
+      this.init()
+      for(var i = 0; i <= this.mainText.length + 1; i++) {
+        this.onClickMe()
+      }
+    }
+  }
   onClickMe() {
     if (this.pos == -1) {
       this.initDirect()
