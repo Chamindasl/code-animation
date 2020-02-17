@@ -54,7 +54,7 @@ export class LzwComponent implements OnInit {
     this.mainText.split('').forEach(e => {
       let arr = this.isInDict(e)
       if (!(arr && arr.length)) {
-        this.dict.push({"step": "-", "p": "-", "c": "-", "dictCode": e, "dictVal": this.nextCode++, "foundInDic": "-" });
+        this.dict.push({"step": "-", "p": "-", "c": "-", "dictCode": e, "dictVal": this.nextCode++, "foundInDic": "-", out:"" });
       }
     })
   }
@@ -72,13 +72,15 @@ export class LzwComponent implements OnInit {
       this.initDirect()
       this.pos = 0
       this.c = this.mainText.charAt(this.pos);
+      this.dict.push({"step": this.step + 1 , "p": "", "c": this.c, "dictCode": "", "dictVal":"", "foundInDic": "", out:""})
+      this.step++
       return
     }
     if (this.p.length >= 0 && this.c.length == 0 && this.pos >= this.mainText.length) {
       if (this.pos == this.mainText.length) {
         let lastIdx = this.isInDict(this.p)[0]
         this.codestream = this.codestream + "(" + lastIdx.dictVal + ")";
-        this.dict.push({"step": this.step + 1, "p": this.p, "c": "", "dictCode": lastIdx.dictCode, "dictVal": lastIdx.dictVal, "foundInDic": ""})
+        this.dict.push({"step": this.step + 1, "p": this.p, "c": "", "dictCode": "", "dictVal": "", "foundInDic": "", out:lastIdx.dictVal})
       }
       this.pos++;
     } else {
@@ -90,8 +92,9 @@ export class LzwComponent implements OnInit {
         }
         this.p = this.p + this.c;
       } else {
-        this.codestream = this.codestream + "(" + this.isInDict(this.p)[0].dictVal + ")";
-        this.dict.push({ "step": this.step + 1, "p": this.p, "c": this.c, "dictCode": this.p + this.c, "dictVal": this.nextCode++, "foundInDic": "" });
+        var out = this.isInDict(this.p)[0].dictVal
+        this.codestream = this.codestream + "(" + out + ")";
+        this.dict.push({ "step": this.step + 1, "p": this.p, "c": this.c, "dictCode": this.p + this.c, "dictVal": this.nextCode++, "foundInDic": "", out: out });
         this.p = this.c
         this.pStartPos = this.pos;
         this.step++

@@ -1,9 +1,10 @@
 <h2> LZW Compression / Decompression </h2>
-<div class="container">
+<div class="container-fluid">
   <div class="row">
-    <div class="col-sm">
-      <div>
-        <input [(ngModel)]="textField" type="text">
+    <div class="col-xl border border-primary">
+      <div class="col">
+        <label>Input</label>
+        <input [(ngModel)]="textField" type="text" style="margin-left:5px">
       </div>
       <div>
         <label>{{mainText|slice : 0 : pStartPos +1}}</label>
@@ -12,7 +13,7 @@
         <label>{{mainText|slice : pos + 1}}</label>
       </div>
       <div>
-        <button (click)="init()">Init 1</button>
+        <button (click)="init()">Init</button>
         <button (click)="onClickMe()">Step by Step</button>
       </div>
       <div>
@@ -48,16 +49,15 @@
         </li>
       </ul>
     </div>
-    <div class="col-sm">
+    <div class="col-xl">
       <div>P = {{p}}</div>
       <div>C = {{c}}</div>
       <div>P + C = {{p + c}}</div>
       <div>codestream = {{codestream}}</div>
       <div>pos = {{pos}}</div>
     </div>
-    <div class="col-sm">
-
-      <div class="three-column">
+    <div class="col-xl">
+      <div class="row">
         <table border="1">
           <tr>
             <th>step</th>
@@ -65,6 +65,7 @@
             <th>c</th>
             <th>p + c</th>
             <th>found in</th>
+            <th>dict</th>
             <th>out</th>
           </tr>
           <tr *ngFor="let row of dict">
@@ -83,9 +84,14 @@
             <td>
               {{row.foundInDic}}
             </td>
-            <td>
+            <td *ngIf="row.dictVal">
               ({{row.dictVal}}){{row.dictCode}}
             </td>
+            <td *ngIf="!row.dictVal"></td>
+            <td *ngIf="row.out">
+              ({{row.out}})
+            </td>
+            <td *ngIf="!row.out"></td>
           </tr>
         </table>
       </div>
