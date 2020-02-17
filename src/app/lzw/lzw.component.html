@@ -1,4 +1,4 @@
-<h2> LZW Compression / Decompression </h2>>
+<h2> LZW Compression / Decompression </h2>
 <div class="row">
   <div class="three-column">
     <div>
@@ -11,6 +11,7 @@
       <label>{{mainText|slice : pos + 1}}</label>
     </div>
     <div>
+      <mat-checkbox [(ngModel)]="useMarkTable">Use MarkDaly Table</mat-checkbox>
       <button (click)="init()">Init</button>
       <button (click)="onClickMe()">Next</button>
     </div>
@@ -52,22 +53,22 @@
 <div class="row">
 
   <ul class="oul">
-    <li [ngClass]="{'selected': step==10}">At the start the dictionary contains all possible roots and P is empty.</li>
-    <li [ngClass]="{'selected': step==20}">Let C be the next character in the stream</li>
-    <li [ngClass]="{'selected': step==30}">Is the new string P+C present in the dictionary?
+    <li [ngClass]="{'selected': flowStep==10}">At the start the dictionary contains all possible roots and P is empty.</li>
+    <li [ngClass]="{'selected': flowStep==20}">Let C be the next character in the stream</li>
+    <li [ngClass]="{'selected': flowStep==30}">Is the new string P+C present in the dictionary?
       <ul>
-        <li [ngClass]="{'selected': step==40}"> If yes, P = P+C (extend the string P with C)</li>
-        <li [ngClass]="{'selected': step==50}"> If no, then
+        <li [ngClass]="{'selected': flowStep==40}"> If yes, P = P+C (extend the string P with C)</li>
+        <li [ngClass]="{'selected': flowStep==50}"> If no, then
           <ul>
-            <li [ngClass]="{'selected': step==60}">Output the code word which represents P to the codestream</li>
-            <li [ngClass]="{'selected': step==70}"> Add the string P+C to the dictionary</li>
-            <li [ngClass]="{'selected': step==80}"> Set P=C (P contains only C now)</li>
+            <li [ngClass]="{'selected': flowStep==60}">Output the code word which represents P to the codestream</li>
+            <li [ngClass]="{'selected': flowStep==70}"> Add the string P+C to the dictionary</li>
+            <li [ngClass]="{'selected': flowStep==80}"> Set P=C (P contains only C now)</li>
           </ul>
         </li>
-        <li [ngClass]="{'selected': step==90}"> Check if there are more characters in the stream
+        <li [ngClass]="{'selected': flowStep==90}"> Check if there are more characters in the stream
           <ul>
-            <li [ngClass]="{'selected': step==100}">If yes, go back to the second step</li>
-            <li [ngClass]="{'selected': step==110}">If no, then output the code representing P to the codestream and end</li>
+            <li [ngClass]="{'selected': flowStep==100}">If yes, go back to the second step</li>
+            <li [ngClass]="{'selected': flowStep==110}">If no, then output the code representing P to the codestream and end</li>
           </ul>
         </li>
       </ul>

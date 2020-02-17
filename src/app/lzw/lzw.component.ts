@@ -22,6 +22,9 @@ export class LzwComponent implements OnInit {
   public dict = [];
   public step = 0;
   public nextCode = 0;
+  public useMarkTable = false;
+  public flowStep = 0;
+
   constructor() {}
 
   ngOnInit(): void {
@@ -66,19 +69,23 @@ export class LzwComponent implements OnInit {
       if (this.pos == this.mainText.length) {
         let lastIdx = this.isInDict(this.p)[0]
         this.codestream = this.codestream + "(" + lastIdx.dictVal + ")";
-        this.dict.push({"step": this.pos + 1, "p": this.p, "c": "", "dictCode": lastIdx.dictCode, "dictVal": lastIdx.dictVal, "foundInDic": ""})
+        this.dict.push({"step": this.step + 1, "p": this.p, "c": "", "dictCode": lastIdx.dictCode, "dictVal": lastIdx.dictVal, "foundInDic": ""})
       }
       this.pos++;
     } else {
       let arr = this.isInDict(this.p + this.c)
       if (arr && arr.length) {
-        this.dict.push({ "step": this.pos + 1, "p": this.p, "c": this.c, "dictCode": "", "dictVal": "", "foundInDic": arr[0].dictVal });
+        if (!this.useMarkTable) {
+          this.dict.push({ "step": this.step + 1, "p": this.p, "c": this.c, "dictCode": "", "dictVal": "", "foundInDic": arr[0].dictVal });
+          this.step++
+        }
         this.p = this.p + this.c;
       } else {
         this.codestream = this.codestream + "(" + this.isInDict(this.p)[0].dictVal + ")";
-        this.dict.push({ "step": this.pos + 1, "p": this.p, "c": this.c, "dictCode": this.p + this.c, "dictVal": this.nextCode++, "foundInDic": "" });
+        this.dict.push({ "step": this.step + 1, "p": this.p, "c": this.c, "dictCode": this.p + this.c, "dictVal": this.nextCode++, "foundInDic": "" });
         this.p = this.c
         this.pStartPos = this.pos;
+        this.step++
       }
       this.pos++
       this.c = this.mainText.charAt(this.pos);

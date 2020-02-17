@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LzwComponent } from './lzw/lzw.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { LzwComponent } from './lzw/lzw.component';
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatCheckboxModule,
+    NoopAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
