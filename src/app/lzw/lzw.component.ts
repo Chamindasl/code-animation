@@ -11,6 +11,7 @@ import {
 export class LzwComponent implements OnInit {
 
   public textField = "AAABBAAAAABCCBAAABCDDDBABCDEEDCBBDEBBEDBABDCCDBAAABD CBAAAAABBAAA";
+  public rootDictCodes = "ABCDE";
   public mainText = "";
   public start = 0;
   public len = 1;
@@ -55,7 +56,7 @@ export class LzwComponent implements OnInit {
 
   initDirect() {
     this.dict = []
-    this.mainText.split('').forEach(e => {
+    this.rootDictCodes.trim().split('').forEach(e => {
       let arr = this.isInDict(e)
       if (!(arr && arr.length)) {
         this.dict.push({"step": "-", "p": "-", "c": "-", "dictCode": e, "dictVal": this.nextCode++, "foundInDic": "-", out:"" });
