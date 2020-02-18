@@ -9,10 +9,10 @@
         <input [(ngModel)]="textField" type="text" style="margin-left:5px">
       </div>
       <div>
-        <label>{{mainText|slice : 0 : pStartPos +1}}</label>
+        <label class="large">{{mainText|slice : 0 : pStartPos +1}}</label>
         <label class="solid-red">{{p}}</label>
         <label class="solid-blue">{{c}}</label>
-        <label>{{mainText|slice : pos + 1}}</label>
+        <label class="large">{{mainText|slice : pos + 1}}</label>
       </div>
       <div>
         <button (click)="init()">Init</button>
