@@ -1,7 +1,9 @@
 <h2> LZW Compression / Decompression </h2>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xl border border-primary">
+    <div class="col-xl">
+      <div class="row">
+        <div class="col-xl border border-primary">
       <div class="col">
         <label>Input</label>
         <input [(ngModel)]="textField" type="text" style="margin-left:5px">
@@ -49,12 +51,15 @@
         </li>
       </ul>
     </div>
+      </div>
+    </div>
     <div class="col-xl">
       <div>P = {{p}}</div>
       <div>C = {{c}}</div>
       <div>P + C = {{p + c}}</div>
       <div>codestream = {{codestream}}</div>
       <div>pos = {{pos}}</div>
+      <div>The efficiency = 1 - (Number of codestream codes + Root dictionary size) / Length of the original charstream = 1 - ({{numOfCodeStreamCode}} + {{rootDictSize}}) / {{mainText.length}} = {{(1-(numOfCodeStreamCode+rootDictSize)/mainText.length)*100}} % </div>
     </div>
     <div class="col-xl">
       <div class="row">

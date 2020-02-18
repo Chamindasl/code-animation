@@ -25,6 +25,8 @@ export class LzwComponent implements OnInit {
   public useMarkTable = false;
   public flowStep = 0;
   public autoRun = false;
+  public numOfCodeStreamCode = 0;
+  public rootDictSize = 0;
 
   constructor() {}
 
@@ -47,6 +49,8 @@ export class LzwComponent implements OnInit {
     this.pStartPos = -1;
     this.step = 0
     this.nextCode = 1;
+    this.numOfCodeStreamCode = 0;
+    this.rootDictSize = 0;
   }
 
   initDirect() {
@@ -55,6 +59,7 @@ export class LzwComponent implements OnInit {
       let arr = this.isInDict(e)
       if (!(arr && arr.length)) {
         this.dict.push({"step": "-", "p": "-", "c": "-", "dictCode": e, "dictVal": this.nextCode++, "foundInDic": "-", out:"" });
+        this.rootDictSize++
       }
     })
   }
@@ -81,20 +86,22 @@ export class LzwComponent implements OnInit {
         let lastIdx = this.isInDict(this.p)[0]
         this.codestream = this.codestream + "(" + lastIdx.dictVal + ")";
         this.dict.push({"step": this.step + 1, "p": this.p, "c": "", "dictCode": "", "dictVal": "", "foundInDic": "", out:lastIdx.dictVal})
+        this.numOfCodeStreamCode++
       }
       this.pos++;
     } else {
       let arr = this.isInDict(this.p + this.c)
       if (arr && arr.length) {
         if (!this.useMarkTable) {
-          this.dict.push({ "step": this.step + 1, "p": this.p, "c": this.c, "dictCode": "", "dictVal": "", "foundInDic": arr[0].dictVal });
+          this.dict.push({ "step": this.step + 1, "p": this.p, "c": this.c, "dictCode": "", "dictVal": "", "foundInDic": arr[0].dictVal, out:""});
           this.step++
         }
         this.p = this.p + this.c;
       } else {
         var out = this.isInDict(this.p)[0].dictVal
         this.codestream = this.codestream + "(" + out + ")";
-        this.dict.push({ "step": this.step + 1, "p": this.p, "c": this.c, "dictCode": this.p + this.c, "dictVal": this.nextCode++, "foundInDic": "", out: out });
+        this.dict.push({ "step": this.step + 1, "p": this.p, "c": this.c, "dictCode": this.p + this.c, "dictVal": this.nextCode++, "foundInDic": "", out: out});
+        this.numOfCodeStreamCode++
         this.p = this.c
         this.pStartPos = this.pos;
         this.step++
