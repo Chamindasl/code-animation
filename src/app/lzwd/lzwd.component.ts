@@ -124,7 +124,6 @@ export class LzwdComponent implements OnInit {
         let i = this.pos
         for (;i +1 != this.pos;) {
             this.stepToMethod[this.flowStep](this);
-            console.log(" i " + i + " pos " + this.pos)
         }
       }
     } else {
