@@ -72,6 +72,7 @@ export class LzwcComponent implements OnInit {
       }
     }
   }
+
   onClickMe() {
     if (this.pos == -1) {
       this.initDirect()
