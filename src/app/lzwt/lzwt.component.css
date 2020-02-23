@@ -1,0 +1,31 @@
+label.solid-blue {
+    border-style: solid;
+    border-color: blue;
+    font-size: 25px
+}
+
+label.solid-red {
+    border-style: solid;
+    border-color: red;
+    font-size: 25px
+}
+
+label.large {
+  font-size: 25px;
+  word-break:break-all;
+  table-layout:fixed;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.oul {
+  text-align:left;
+  margin-top: 40px
+}
+
+.selected
+{
+  background-color:yellow;
+}

@@ -28,14 +28,14 @@
 
           <ol class="oul" type="1" start="0">
             <li [ngClass]="{'bg-warning': flowStep=='0'}">INIT</li>
-            <li [ngClass]="{'bg-warning': flowStep=='1'}">AThe dictionary at the start of decoding contains all possible roots</li>
+            <li [ngClass]="{'bg-warning': flowStep=='1'}">The dictionary at the start of decoding contains all possible roots</li>
             <li [ngClass]="{'bg-warning': flowStep=='2'}">cW = the first code word in the codestream (this would be a root)</li>
             <li [ngClass]="{'bg-warning': flowStep=='3'}">Output the string representing cW from the dictionary to the output stream.</li>
             <li [ngClass]="{'bg-warning': flowStep=='4'}">Set pW=cW.</li>
             <li [ngClass]="{'bg-warning': flowStep=='5'}">cW = next code word in the codestream.</li>
             <li [ngClass]="{'bg-warning': flowStep=='6'}">Is this string present in the dictionary?
-              <ol type="a" [ngClass]="{'bg-warning': flowStep=='61'}">
-                <li [ngClass]="{'bg-warning': flowStep=='61a'}">If it is:
+              <ol type="a" [ngClass]="{'bg-warning': flowStep=='6'}">
+                <li [ngClass]="{'bg-warning': flowStep=='61'}">If it is:
                   <ol type="i" [ngClass]="{'bg-warning': flowStep=='61'}">
                     <li [ngClass]="{'bg-warning': flowStep=='61a'}">Output the string representing cW to the output stream</li>
                     <li [ngClass]="{'bg-warning': flowStep=='61b'}">Set P = string representing pW</li>
@@ -65,7 +65,7 @@
     </div>
       <div class="col-xl">
         <div><span class="border border-danger">Pw = {{pw}}</span></div>
-        <div><span class="border border-danger">Cw = {{cw}}</span></div>
+        <div><span class="border border-danger" [ngClass]="{'bg-warning': flowStep=='61'}">Cw = {{cw}}</span></div>
         <div><span class="border border-danger">P = {{p}}</span></div>
         <div><span class="border border-primary">C = {{c}}</span></div>
         <div>P + C = {{p + c}}</div>
@@ -103,7 +103,7 @@
             <td>
               {{row.c}}
             </td>
-            <td *ngIf="row.dictCode">
+            <td *ngIf="row.dictCode" [ngClass]="{'bg-warning': row.dictIdx==cw && flowStep=='61'}">
               ({{row.dictIdx}}){{row.dictCode}}
             </td>
             <td *ngIf="!row.dictCode"></td>

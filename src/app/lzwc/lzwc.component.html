@@ -4,78 +4,77 @@
     <div class="col-xl">
       <div class="row">
         <div class="col-xl border border-primary">
-      <div class="col">
-        <label>Input</label>
-        <input [(ngModel)]="textField" type="text" style="margin-left:5px">
-      </div>
-      <div>
-        <label class="large">{{mainText|slice : 0 : pStartPos +1}}</label>
-        <label class="solid-red">{{p}}</label>
-        <label class="solid-blue">{{c}}</label>
-        <label class="large">{{mainText|slice : pos + 1}}</label>
-      </div>
-      <div>
-        <button (click)="init()">Init</button>
-        <button (click)="onClickMe()">Step by Step</button>
-      </div>
-      <div>
-        <mat-checkbox [(ngModel)]="useMarkTable">Use MarkDaly Table</mat-checkbox>
-        <mat-checkbox [(ngModel)]="autoRun" (click)="auto()">Auto Run</mat-checkbox>
-      </div>
+          <div class="col">
+            <label>Input</label>
+            <input [(ngModel)]="inputTxt" type="text" style="margin-left:5px">
+          </div>
+          <div>
+            <label *ngIf="pos>0 && pStartPos > 0"  class="large">{{mainText|slice : 0 : pStartPos}}</label>
+            <label class="solid-blue">{{mainText|slice : pStartPos : pos}}</label>
+            <label class="solid-red">{{mainText[pos]}}</label>
+            <label class="large">{{mainText|slice : pos + 1}}</label>
+          </div>
+          <div>
+            <button (click)="init()">Init</button>
+            <button (click)="onClick()">Step by Step</button>
+          </div>
+          <div>
+            <mat-checkbox [(ngModel)]="intSteps" >Add Intermediate Steps</mat-checkbox>
+            <mat-checkbox [(ngModel)]="semiAutoRun" >Semi Auto </mat-checkbox>
+            <mat-checkbox [(ngModel)]="autoRun" >Auto Run</mat-checkbox>
+          </div>
 
-      <ul class="oul">
-        <li [ngClass]="{'selected': flowStep==10}">At the start the dictionary contains all possible roots and P is
-          empty.
-        </li>
-        <li [ngClass]="{'selected': flowStep==20}">Let C be the next character in the stream</li>
-        <li [ngClass]="{'selected': flowStep==30}">Is the new string P+C present in the dictionary?
-          <ul>
-            <li [ngClass]="{'selected': flowStep==40}"> If yes, P = P+C (extend the string P with C)</li>
-            <li [ngClass]="{'selected': flowStep==50}"> If no, then
-              <ul>
-                <li [ngClass]="{'selected': flowStep==60}">Output the code word which represents P to the codestream
+          <ol class="oul" type="1" start="0">
+            <li [ngClass]="{'bg-warning': flowStep=='0'}">INIT</li>
+            <li [ngClass]="{'bg-warning': flowStep=='1'}">At the start the dictionary contains all possible roots and P is empty.</li>
+            <li [ngClass]="{'bg-warning': flowStep=='2'}">Let C be the next character in the stream</li>
+            <li [ngClass]="{'bg-warning': flowStep=='3'}">Is the new string P+C present in the dictionary?
+              <ol type="a" [ngClass]="{'bg-warning': flowStep=='3a'}">
+                <li [ngClass]="{'bg-warning': flowStep=='3a1'}">If yes, P = P+C (extend the string P with C)
                 </li>
-                <li [ngClass]="{'selected': flowStep==70}"> Add the string P+C to the dictionary</li>
-                <li [ngClass]="{'selected': flowStep==80}"> Set P=C (P contains only C now)</li>
-              </ul>
-            </li>
-            <li [ngClass]="{'selected': flowStep==90}"> Check if there are more characters in the stream
-              <ul>
-                <li [ngClass]="{'selected': flowStep==100}">If yes, go back to the second step</li>
-                <li [ngClass]="{'selected': flowStep==110}">If no, then output the code representing P to the codestream
-                  and end
+                <li [ngClass]="{'bg-warning': flowStep=='3b'}">If no, then
+                  <ol type="i" [ngClass]="{'bg-warning': flowStep=='3b'}">
+                    <li [ngClass]="{'bg-warning': flowStep=='3b1'}">Output the code word which represents P to the codestream</li>
+                    <li [ngClass]="{'bg-warning': flowStep=='3b2'}">Add the string P+C to the dictionary</li>
+                    <li [ngClass]="{'bg-warning': flowStep=='3b3'}">Set P=C (P contains only C now)</li>
+                  </ol>
                 </li>
-              </ul>
+              </ol>
             </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
+            <li [ngClass]="{'bg-warning': flowStep=='4'}">Check if there are more characters in the stream
+              <ol type="i">
+                <li [ngClass]="{'bg-warning': flowStep=='4a'}">If yes, go back to the second step</li>
+                <li [ngClass]="{'bg-warning': flowStep=='4b'}">If no, then output the code representing P to the codestream and end</li>
+              </ol>
+            </li>
+            <li [ngClass]="{'bg-warning': flowStep=='END'}">END</li>
+          </ol>
+        </div>
       </div>
     </div>
     <div class="col-xl">
       <div><span class="border border-danger">P = {{p}}</span></div>
       <div><span class="border border-primary">C = {{c}}</span></div>
-      <div>P + C = {{p + c}}</div>
-      <div>codestream = {{codestream}}</div>
+      <div [ngClass]="{'bg-warning': foundRow.dictCode==p+c}">P + C = {{p + c}}</div>
+      <div>codestream = {{csop}}</div>
       <div>pos = {{pos}}</div>
-      <div>The efficiency = 1 - (Number of codestream codes + Root dictionary size) / Length of the original charstream = 1 - ({{numOfCodeStreamCode}} + {{rootDictSize}}) / {{mainText.length}} = {{(1-(numOfCodeStreamCode+rootDictSize)/mainText.length)*100}} % </div>
+      <div>The efficiency = 1 - (Number of codestream codes + Root dictionary size) / Length of the original charstream = 1 - ({{step - initDictLen}} + {{initDictLen}}) / {{mainText.length}} = {{(1-(step - initDictLen + initDictLen)/mainText.length)*100}} % </div>
+      t.step - t.initDictLen
     </div>
     <div class="col-xl">
       <div class="row">
         <table border="1">
           <tr>
-            <th>step</th>
-            <th>p</th>
-            <th>c</th>
-            <th>p + c</th>
-            <th>found in</th>
-            <th>dict</th>
-            <th>out</th>
+            <th>n</th>
+            <th>P</th>
+            <th>C</th>
+            <th>Found In</th>
+            <th>Ext Dic</th>
+            <th>Out</th>
           </tr>
           <tr *ngFor="let row of dict">
             <td>
-              {{row.step}}
+              {{row.n}}
             </td>
             <td>
               {{row.p}}
@@ -84,15 +83,12 @@
               {{row.c}}
             </td>
             <td>
-              {{row.p + row.c}}
+              {{row.foundIn}}
             </td>
-            <td>
-              {{row.foundInDic}}
+            <td *ngIf="row.dictCode" [ngClass]="{'bg-warning': row.dictIdx==foundRow.dictIdx}">
+              ({{row.dictIdx}}){{row.dictCode}}
             </td>
-            <td *ngIf="row.dictVal">
-              ({{row.dictVal}}){{row.dictCode}}
-            </td>
-            <td *ngIf="!row.dictVal"></td>
+            <td *ngIf="!row.dictCode"></td>
             <td *ngIf="row.out">
               ({{row.out}})
             </td>

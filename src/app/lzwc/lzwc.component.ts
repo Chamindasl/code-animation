@@ -1,7 +1,4 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-lzwc',
@@ -10,121 +7,209 @@ import {
 })
 export class LzwcComponent implements OnInit {
 
-  public textField = "AAABBAAAAABCCBAAABCDDDBABCDEEDCBBDEBBEDBABDCCDBAAABD CBAAAAABBAAA";
-  public mainText = "";
-  public start = 0;
-  public len = 1;
-  public p = "";
+  public inputTxt = "A AABBAAAAABCCBAAABCDDDBABCDEEDCBBDEBBEDBABDCCDBAAABD CBAAAAABBAAA"
+  public initDictLen = 0
+  public mainText = []
+  public flowStep = "0";
   public c = "";
-  public codestream = "";
+  public p = "";
+  public csop = "";
   public pos = -1;
-  public pStartPos = -1;
-  public dict = [];
-  public step = 0;
-  public nextCode = 0;
-  public useMarkTable = false;
-  public flowStep = 0;
+  public step = -1;
+  public pStartPos  = -1;
   public autoRun = false;
-  public numOfCodeStreamCode = 0;
-  public rootDictSize = 0;
+  public semiAutoRun = false;
+  public dict = [];
+  public dictLastItem = {}
+  public foundRow = {dictIdx:-1, dictCode:"_"}
+  public intSteps = true
 
-  constructor() {}
 
-  ngOnInit(): void {
-    this.initDirect();
+  public stepToMethod = {
+    "0" : this.step0,
+    "1" : this.step1,
+    "2" : this.step2,
+    "3" : this.step3,
+    "3a" : this.step3a,
+    "3a1" : this.step3a1,
+    "3b" : this.step3b,
+    "3b1" : this.step3b1,
+    "3b2" : this.step3b2,
+    "3b3" : this.step3b3,
+    "4" : this.step4,
+    "4a" : this.step4a,
+    "4b" : this.step4b,
+    "END" : this.stepEND
   }
+
+  constructor() { }
 
   init() {
-    //  this.initDirect();
-    this.mainText = "";
-    this.textField.split('').forEach(e => {
-      this.mainText = this.mainText + e.trim()
-    })
+    this.initDictLen = 0
+    this.mainText = []
+    this.flowStep = "0";
+    this.p = "";
+    this.c = "";
+    this.csop = "";
     this.pos = -1;
-    this.dict = []
-    this.codestream = "";
-    this.pStartPos = -1;
-    this.p = ""
-    this.c = ""
-    this.pStartPos = -1;
-    this.step = 0
-    this.nextCode = 1;
-    this.numOfCodeStreamCode = 0;
-    this.rootDictSize = 0;
+    this.pStartPos  = -1;
+    this.autoRun = false;
+    this.dict = [];
+    this.dictLastItem = {}
+    this.emptyFoundRow(this)
+    this.step = -1;
   }
 
-  initDirect() {
-    this.dict = []
-    this.mainText.split('').forEach(e => {
-      let arr = this.isInDict(e)
-      if (!(arr && arr.length)) {
-        this.dict.push({"step": "-", "p": "-", "c": "-", "dictCode": e, "dictVal": this.nextCode++, "foundInDic": "-", out:"" });
-        this.rootDictSize++
-      }
-    })
+  emptyFoundRow(t) {
+    t.foundRow = {dictIdx:-1, dictCode:"_"}
   }
 
-  auto() {
-    if (!this.autoRun) {
-      this.init()
-      for(var i = 0; i <= this.mainText.length + 1; i++) {
-        this.onClickMe()
-      }
-    }
+  setLII(k, v) {
+    this.dictLastItem[k] = v
   }
 
-  onClickMe() {
-    if (this.pos == -1) {
-      this.initDirect()
-      this.pos = 0
-      this.c = this.mainText.charAt(this.pos);
-      this.dict.push({"step": this.step + 1 , "p": "", "c": this.c, "dictCode": "", "dictVal":"", "foundInDic": "", out:""})
-      this.step++
-      return
-    }
-    if (this.p.length >= 0 && this.c.length == 0 && this.pos >= this.mainText.length) {
-      if (this.pos == this.mainText.length) {
-        let lastIdx = this.isInDict(this.p)[0]
-        this.codestream = this.codestream + "(" + lastIdx.dictVal + ")";
-        this.dict.push({"step": this.step + 1, "p": this.p, "c": "", "dictCode": "", "dictVal": "", "foundInDic": "", out:lastIdx.dictVal})
-        this.numOfCodeStreamCode++
-      }
-      this.pos++;
-    } else {
-      let arr = this.isInDict(this.p + this.c)
-      if (arr && arr.length) {
-        if (!this.useMarkTable) {
-          this.dict.push({ "step": this.step + 1, "p": this.p, "c": this.c, "dictCode": "", "dictVal": "", "foundInDic": arr[0].dictVal, out:""});
-          this.step++
-        }
-        this.p = this.p + this.c;
-      } else {
-        var out = this.isInDict(this.p)[0].dictVal
-        this.codestream = this.codestream + "(" + out + ")";
-        this.dict.push({ "step": this.step + 1, "p": this.p, "c": this.c, "dictCode": this.p + this.c, "dictVal": this.nextCode++, "foundInDic": "", out: out});
-        this.numOfCodeStreamCode++
-        this.p = this.c
-        this.pStartPos = this.pos;
-        this.step++
-      }
-      this.pos++
-      this.c = this.mainText.charAt(this.pos);
-    }
-
-  }
-
-  sleep(milliseconds) {
-    const date = Date.now();
-    let currentDate = null;
-    do {
-      currentDate = Date.now();
-    } while (currentDate - date < milliseconds);
-  }
-
-  isInDict(t) {
+  getRowByCode(t) {
     return this.dict.filter(function(row) {
       return row.dictCode == t
     });
   }
 
+  getRowByIdx(t) {
+    return this.dict.filter(function(row) {
+      return row.dictIdx == t
+    });
+  }
+
+  addNewRow(n, p, c, foundIn, dictIdx, dictCode, out) {
+    this.dictLastItem = {
+                           "n":n,
+                           "p":p,
+                           "c":c,
+                           "foundIn":foundIn,
+                           "dictIdx":dictIdx,
+                           "dictCode":dictCode,
+                           "out":out,
+                           }
+      this.dict.push(this.dictLastItem)
+  }
+
+  initDict() {
+    this.dict = []
+    this.mainText = []
+    this.inputTxt.trim().split('').forEach(e => {
+      if(e && e.trim().length) {
+        let arr = this.getRowByCode(e.trim())
+        this.mainText.push(e.trim())
+        if (!(arr && arr.length)) {
+          this.addNewRow("", "", "", "",  ++this.initDictLen, e.trim(), "")
+        }
+      }
+    })
+    this.step  = this.initDictLen
+  }
+
+  ngOnInit(): void {
+  }
+
+  onClick() {
+    if (!this.autoRun && !this.semiAutoRun) {
+      this.stepToMethod[this.flowStep](this);
+    } else if (this.semiAutoRun && !this.autoRun) {
+      if (this.flowStep != 'END') {
+        let i = this.step
+        do {
+          this.stepToMethod[this.flowStep](this);
+        } while (this.step <= i || !(this.flowStep =='2' || this.flowStep == 'END'))
+      }
+    } else {
+      while (this.flowStep != 'END') {
+          this.stepToMethod[this.flowStep](this);
+      }
+    }
+
+  }
+
+  step0(t) {
+      t.flowStep = "1";
+  }
+
+  step1(t) {
+      t.initDict()
+      t.flowStep = "2"
+  }
+
+  step2(t) {
+    t.c = t.mainText[++t.pos]
+    t.flowStep = "3"
+  }
+
+  step3(t) {
+    let arr = t.getRowByCode(t.p + t.c)
+    if ((arr && arr.length)) {
+      t.foundRow = arr[0]
+      t.flowStep =  "3a"
+    } else {
+      t.emptyFoundRow(t)
+      t.flowStep = "3b"
+    }
+  }
+
+  step3a(t) {
+    if(t.intSteps) {
+      t.addNewRow("", t.p, t.c, "" + t.foundRow.dictIdx, "", "")
+    }
+    t.emptyFoundRow(t)
+    t.flowStep = "3a1"
+  }
+
+  step3a1(t) {
+      t.p = t.p + t.c
+      if (t.pStartPos == -1) {t.pStartPos = 0}
+      t.flowStep = "4"
+  }
+
+  step3b(t) {
+    t.step++
+    t.flowStep = "3b1"
+  }
+
+  step3b1(t) {
+    t.csop = t.csop + "(" + t.getRowByCode(t.p)[0].dictIdx + ")"
+    t.flowStep = "3b2"
+  }
+
+  step3b2(t) {
+    t.addNewRow(t.step - t.initDictLen , t.p, t.c, "", t.step, t.p + t.c, t.getRowByCode(t.p)[0].dictIdx)
+    t.flowStep = "3b3"
+  }
+
+  step3b3(t) {
+    t.p = t.c
+    t.pStartPos = t.pos
+    t.flowStep = "4"
+  }
+
+  step4(t) {
+    if(t.pos + 1 < t.mainText.length) {
+      t.flowStep = "4a"
+    } else {
+      t.flowStep = "4b"
+    }
+  }
+
+  step4a(t) {
+      t.flowStep = "2"
+  }
+
+  step4b(t) {
+    t.csop = t.csop + "(" + t.getRowByCode(t.p)[0].dictIdx + ")"
+    t.addNewRow(t.step - t.initDictLen + 1, "", "", "", "", "", t.getRowByCode(t.p)[0].dictIdx)
+    t.step++
+    t.flowStep = "END"
+  }
+
+  stepEND(t) {
+  }
+
 }
+
