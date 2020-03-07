@@ -68,9 +68,8 @@
             <th>n</th>
             <th>P</th>
             <th>C</th>
-            <th>Found In</th>
-            <th>Ext Dic</th>
             <th>Out</th>
+            <th>Ext Dic</th>
           </tr>
           <tr *ngFor="let row of dict">
             <td>
@@ -82,17 +81,14 @@
             <td>
               {{row.c}}
             </td>
-            <td>
-              {{row.foundIn}}
-            </td>
-            <td *ngIf="row.dictCode" [ngClass]="{'bg-warning': row.dictIdx==foundRow.dictIdx}">
-              ({{row.dictIdx}}){{row.dictCode}}
-            </td>
-            <td *ngIf="!row.dictCode"></td>
             <td *ngIf="row.out">
               ({{row.out}})
             </td>
             <td *ngIf="!row.out"></td>
+            <td *ngIf="row.dictCode" [ngClass]="{'bg-warning': row.dictIdx==foundRow.dictIdx}">
+              ({{row.dictIdx}}){{row.dictCode}}
+            </td>
+            <td *ngIf="!row.dictCode"></td>
           </tr>
         </table>
       </div>

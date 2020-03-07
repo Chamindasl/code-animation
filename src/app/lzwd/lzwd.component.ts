@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LzwdComponent implements OnInit {
 
-  public inputTxt = "(1)(6)(2)(2)(6)(10)(2)(3)(3)(9)(7)(3)(4)(18)(9)(12)(4)(5)(5)(4)(14)(2)(22)(8)(24)(20)(25)(17)(15)(1)(27)(14)(10)(7)(34)"
+  public inputTxt = "(1)(7)(8)(1)(2)(2)(9)(13)(9)(2)(3)(4)(12)(14)(15)(17)(1)(5)(19)(20)(16)(4)(8)(24)(26)(22)(9)(30)(21)(32)(33)(25)(27)(3)(36)(8)(18)(10)(17)(5)(4)(40)(28)(42)(3)(6)(11)(4)(5)(3)(46)(48)(7)(47)(52)(10)(1)(56)(5)(57)(17)(60)(38)(23)(65)(4)(47)(40)(61)(15)(23)(73)(68)(26)(78)(51)(25)(14)(2)(6)(79)(20)(8)(85)(75)(88)(7)(11)(83)(9)"
   public initDictTxt = "ABCDE"
   public initDictLen = 0
   public mainText = []
@@ -127,7 +127,7 @@ export class LzwdComponent implements OnInit {
         }
       }
     } else {
-      for (let i = this.pos; this.pos <= this.mainText.length; i++) {
+      for (let i = this.pos; this.pos + 1 <= this.mainText.length; i++) {
           this.stepToMethod[this.flowStep](this);
       }
     }
@@ -181,7 +181,7 @@ export class LzwdComponent implements OnInit {
   }
 
   step61a(t) {
-      t.csop = t.csop + t.getRowByIdx(t.cw)[0].dictCode
+      t.csop = t.csop + "  ["  +  t.getRowByIdx(t.cw)[0].dictCode + "] "
       t.flowStep = "61b"
   }
 
@@ -196,7 +196,7 @@ export class LzwdComponent implements OnInit {
   }
 
   step61d(t) {
-      t.addNewRow(t.pos, t.pw, t.cw, t.p, t.c, t.p + t.c, t.pos + t.initDictLen, t.p + t.c)
+      t.addNewRow(t.pos, t.pw, t.cw, t.p, t.c, t.getRowByIdx(t.cw)[0].dictCode, t.pos + t.initDictLen, t.p + t.c)
       t.flowStep = "7"
   }
 
@@ -215,13 +215,13 @@ export class LzwdComponent implements OnInit {
   }
 
   step62c(t) {
-      t.csop = t.csop +  t.p + t.c
+      t.csop = t.csop  + "  ["  +  t.p + t.c + "] "
       t.addNewRow(t.pos, t.pw, t.cw, t.p, t.c, t.p + t.c, t.pos + t.initDictLen, t.p + t.c)
       t.flowStep = "7"
   }
 
   step7(t) {
-    if(t.pos < t.mainText.length) {
+    if(t.pos + 1 < t.mainText.length) {
       t.flowStep = "7a"
     } else {
       t.flowStep = "7b"
